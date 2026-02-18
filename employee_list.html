@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Employee List - BSRM Admin</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f0f2f5;
+    margin: 0;
+    padding: 0;
+  }
+
+  header {
+    width: 100%;
+    background-color: #0072ff;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
+
+  header h1 { margin: 0; font-size: 28px; }
+  header p { margin: 5px 0 0 0; }
+
+  .table-container {
+    width: 90%;
+    max-width: 1000px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  table th, table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+  }
+
+  table th {
+    background: #0072ff;
+    color: white;
+  }
+
+  .action-btn {
+    padding: 6px 12px;
+    margin: 2px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    color: white;
+  }
+
+  .view-btn { background: #4CAF50; }
+  .delete-btn { background: #f44336; }
+
+  .center { text-align: center; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Employee List</h1>
+  <p>View and manage all employees</p>
+</header>
+
+<div class="table-container">
+  <table id="employeeTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Employee rows will appear here -->
+    </tbody>
+  </table>
+</div>
+
+<script>
+  const logged = JSON.parse(localStorage.getItem('loggedIn'));
+  if(!logged || logged.role !== 'admin'){
+    alert('Access denied. Admin login required.');
+    window.location.href = 'admin_login.html';
+  }
+
+  const users = JSON.parse(localStorage.getItem('users')) || [];
+  const tbody = document.querySelector('#employeeTable tbody');
+
+  function renderTable() {
+    tbody.innerHTML = '';
+    users.forEach(user => {
+      if(user.role === 'employee'){
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${user.id}</td>
+          <td>${user.name}</td>
+          <td>${user.email}</td>
+          <td>${user.status}</td>
+          <td>
+            <button class="action-btn view-btn" onclick="viewProfile(${user.id})">View</button>
+            <button class="action-btn delete-btn" onclick="deleteEmployee(${user.id})">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      }
+    });
+  }
+
+  function viewProfile(id){
+    localStorage.setItem('viewEmployeeId', id);
+    window.location.href = 'employee_profile_admin.html'; // Separate profile page for admin view
+  }
+
+  function deleteEmployee(id){
+    if(confirm('Are you sure you want to delete this employee?')){
+      const index = users.findIndex(u => u.id === id);
+      if(index > -1){
+        users.splice(index, 1);
+        localStorage.setItem('users', JSON.stringify(users));
+        renderTable();
+        alert('✅ Employee deleted successfully!');
+      }
+    }
+  }
+
+  renderTable();
+</script>
+
+</body>
+</html>

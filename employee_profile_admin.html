@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Employee Profile - Admin View</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  body { font-family:Arial,sans-serif; background:#f0f2f5; margin:0; padding:0; }
+  header { background:#0072ff; color:#fff; text-align:center; padding:20px; box-shadow:0 4px 10px rgba(0,0,0,0.2); }
+  h1{ margin:0; }
+  .container { width:400px; max-width:90%; margin:30px auto; background:#fff; padding:30px; border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,0.1); }
+  .input-group { margin-bottom:15px; }
+  .input-group label { font-weight:bold; display:block; margin-bottom:5px; color:#333; }
+  .input-group input, .input-group select { width:100%; padding:10px; border-radius:6px; border:1px solid #ccc; box-sizing:border-box; }
+  button { width:100%; padding:12px; background:#0072ff; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer; margin-top:10px; transition:0.25s; }
+  button:hover { background:#005fcc; }
+  #message { margin-top:12px; font-weight:bold; text-align:center; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Employee Profile (Admin)</h1>
+</header>
+
+<div class="container">
+  <form id="profileForm">
+    <div class="input-group"><label>Name</label><input type="text" id="name"></div>
+    <div class="input-group"><label>Email</label><input type="email" id="email" disabled></div>
+    <div class="input-group"><label>Status</label>
+      <select id="status">
+        <option value="pending">Pending</option>
+        <option value="confirmed">Confirmed</option>
+        <option value="cancelled">Cancelled</option>
+      </select>
+    </div>
+    <button type="submit">Save Changes</button>
+    <p id="message"></p>
+  </form>
+</div>
+
+<script>
+  const logged = JSON.parse(localStorage.getItem('loggedIn'));
+  if(!logged || logged.role!=='admin'){ alert('Access denied.'); window.location.href='admin_login.html'; }
+
+  const users = JSON.parse(localStorage.getItem('users')) || [];
+  const viewUserId = JSON.parse(localStorage.getItem('viewUserId'));
+  const user = users.find(u=>u.id===viewUserId);
+
+  document.getElementById('name').value = user.name;
+  document.getElementById('email').value = user.email;
+  document.getElementById('status').value = user.status;
+
+  document.getElementById('profileForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    user.name = document.getElementById('name').value;
+    user.status = document.getElementById('status').value;
+    localStorage.setItem('users', JSON.stringify(users));
+    const msg = document.getElementById('message');
+    msg.textContent = "✅ Changes saved!";
+    msg.style.color="green";
+  });
+</script>
+
+</body>
+</html>

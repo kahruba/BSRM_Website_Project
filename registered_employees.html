@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Registered Employees - BSRM</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f0f2f5;
+    margin: 0;
+    padding: 0;
+  }
+  header {
+    width: 100%;
+    background-color: #0072ff;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
+  header h1 { margin: 0; font-size: 28px; }
+  
+  .table-container {
+    width: 90%;
+    max-width: 900px;
+    margin: 30px auto;
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+  }
+
+  th, td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+  }
+
+  thead {
+    background: #0072ff;
+    color: #fff;
+  }
+
+  .action-btn {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #fff;
+    margin-right: 5px;
+  }
+
+  .confirm-btn { background: #4CAF50; }
+  .cancel-btn { background: #f44336; }
+  .pending-btn { background: #FF9800; }
+
+  /* Colourful empty box */
+  .empty-box {
+    background: #ffecb3;
+    color: #8b4513;
+    padding: 20px;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin: 30px auto;
+    max-width: 500px;
+    font-size: 18px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Registered Employees</h1>
+</header>
+
+<div class="table-container">
+  <table id="employeeTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Dynamically filled -->
+    </tbody>
+  </table>
+</div>
+
+<script>
+  const logged = JSON.parse(localStorage.getItem('loggedIn'));
+  if(!logged || logged.role !== 'admin'){
+    alert('Access denied. Please log in as admin.');
+    window.location.href = 'admin_login.html';
+  }
+
+  function renderRegisteredEmployees(){
+    const tbody = document.querySelector('#employeeTable tbody');
+    tbody.innerHTML = '';
+
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const registered = users.filter(u => u.role === 'employee' && !u.addedByAdmin);
+
+    if(registered.length === 0){
+      // Show colourful empty box
+      tbody.innerHTML = <tr><td colspan="5"><div class="empty-box">No registered employees found</div></td></tr>;
+      return;
+    }
+
+    registered.forEach(u => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${u.id}</td>
+        <td>${u.name}</td>
+        <td>${u.email}</td>
+        <td>${u.status}</td>
+        <td>
+          <button class="action-btn confirm-btn" onclick="updateStatus(${u.id}, 'confirmed')">Confirm</button>
+          <button class="action-btn cancel-btn" onclick="updateStatus(${u.id}, 'cancelled')">Cancel</button>
+          <button class="action-btn pending-btn" onclick="updateStatus(${u.id}, 'pending')">Pending</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function updateStatus(id, newStatus){
+    let users = JSON.parse(localStorage.getItem('users')) || [];
+    let user = users.find(u => u.id === id);
+    if(user){
+      user.status = newStatus;
+      if(newStatus === 'confirmed'){
+        user.addedByAdmin = true;
+      } else {
+        user.addedByAdmin = false;
+      }
+      localStorage.setItem('users', JSON.stringify(users));
+      renderRegisteredEmployees();
+    }
+  }
+
+  renderRegisteredEmployees();
+</script>
+</body>
+</html>

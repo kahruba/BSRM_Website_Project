@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin Dashboard - BSRM</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+body { margin:0; font-family:Arial,sans-serif; background:#010f24; }
+header { background:#0072ff; color:#fff; padding:20px; text-align:center; box-shadow:0 4px 10px rgba(0,0,0,0.2); }
+header h1{ margin:0; font-size:28px; }
+header p{ margin:5px 0 0 0; }
+
+.cards { display:flex; justify-content:center; gap:20px; flex-wrap:wrap; padding:30px; }
+.card { background:#fff; padding:20px; border-radius:12px; width:220px; text-align:center; box-shadow:0 6px 20px rgba(0,0,0,0.1); cursor:pointer; transition:0.2s; }
+.card:hover{ transform:translateY(-6px); box-shadow:0 12px 24px rgba(0,0,0,0.15); }
+.card h3{ margin:0; color:#0072ff; }
+.card p{ margin:5px 0 0 0; color:#555; font-size:14px; }
+
+.table-container { width:90%; max-width:900px; margin:30px auto; display:none; }
+table{ width:100%; border-collapse:collapse; background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 6px 14px rgba(0,0,0,0.08); }
+th, td{ padding:12px; border-bottom:1px solid #eee; text-align:left; }
+thead{ background:#0072ff; color:#fff; }
+
+.action-btn{ padding:6px 10px; border:none; border-radius:6px; cursor:pointer; color:#fff; margin-right:5px; }
+.confirm-btn{ background:#4CAF50; }
+.cancel-btn{ background:#f44336; }
+.info-btn{ background:#0072ff; }
+.delete-btn{ background:#f44336; }
+
+.empty-box{ background:#ffeb3b; color:#000; padding:20px; border-radius:12px; text-align:center; font-weight:bold; display:none; margin:30px auto; max-width:500px; box-shadow:0 6px 20px rgba(0,0,0,0.1); }
+
+.modal{ display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); justify-content:center; align-items:center; }
+.modal-content{ background:#fff; padding:30px; border-radius:12px; width:400px; max-width:90%; text-align:left; position:relative; box-shadow:0 6px 20px rgba(0,0,0,0.2); }
+.modal-content h2{ text-align:center; color:#0072ff; margin-bottom:20px; }
+.modal-content label{ display:block; margin:10px 0 5px 0; font-weight:bold; }
+.modal-content input{ width:100%; padding:10px; border-radius:6px; border:1px solid #ccc; box-sizing:border-box; }
+.modal-content button{ margin-top:15px; width:100%; padding:12px; border-radius:6px; border:none; cursor:pointer; font-weight:bold; background:#0072ff; color:#fff; transition:0.25s; }
+.modal-content button:hover{ background:#005fcc; }
+.close-btn{ position:absolute; top:10px; right:15px; font-size:20px; font-weight:bold; cursor:pointer; color:#333; }
+
+#deleteBox{ display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); justify-content:center; align-items:center; }
+#deleteBox .box{ background:#fff; padding:25px; border-radius:12px; text-align:center; max-width:400px; width:90%; box-shadow:0 6px 20px rgba(0,0,0,0.2); }
+#deleteBox button{ padding:10px 20px; margin:5px; border:none; border-radius:6px; font-weight:bold; cursor:pointer; }
+#deleteBox .confirm-btn{ background:#4CAF50; color:#fff; }
+#deleteBox .cancel-btn{ background:#f44336; color:#fff; }
+</style>
+</head>
+<body>
+
+<header>
+<h1>Welcome Admin</h1>
+<p>Manage Employees at BSRM</p>
+</header>
+
+<div class="cards">
+<div class="card" onclick="showViewEmployees()">
+<h3>View Employees</h3>
+<p>See confirmed employees</p>
+</div>
+<div class="card" onclick="location.href='add_employee.html'">
+<h3>Add Employee</h3>
+<p>Add new employee manually</p>
+</div>
+<div class="card" onclick="showRegisteredEmployees()">
+<h3>Registered Employees</h3>
+<p>Confirm / Cancel pending employees</p>
+</div>
+<div class="card" onclick="logout()">
+<h3>Logout</h3>
+<p>Exit Admin Panel</p>
+</div>
+</div>
+
+<div class="empty-box" id="emptyBox">No employees found!</div>
+
+<div class="table-container" id="tableContainer">
+<table id="employeeTable">
+<thead>
+<tr><th>ID</th><th>Name</th><th>Email</th><th>Status</th><th>Actions</th></tr>
+</thead>
+<tbody></tbody>
+</table>
+</div>
+
+<!-- Employee Info Modal -->
+<div class="modal" id="infoModal">
+<div class="modal-content">
+<span class="close-btn" onclick="closeModal()">&times;</span>
+<h2>Employee Info</h2>
+<label>Name</label><input type="text" id="modalName" disabled>
+<label>Email</label><input type="email" id="modalEmail" disabled>
+<label>Status</label><input type="text" id="modalStatus" disabled>
+<label>Address</label><input type="text" id="modalAddress" disabled>
+<label>Department</label><input type="text" id="modalDepartment" disabled>
+<label>Skills</label><input type="text" id="modalSkills" disabled>
+<label>DOB</label><input type="date" id="modalDob" disabled>
+<button onclick="closeModal()">Done</button>
+</div>
+</div>
+
+<!-- Delete Confirmation Box -->
+<div id="deleteBox">
+<div class="box">
+<p>Do you really want to delete this employee?</p>
+<button class="confirm-btn" onclick="confirmDelete()">Yes</button>
+<button class="cancel-btn" onclick="cancelDelete()">Cancel</button>
+</div>
+</div>
+
+<script>
+const logged = JSON.parse(localStorage.getItem('loggedIn'));
+if(!logged || logged.role!=='admin'){
+  alert('Access denied. Please log in as admin.');
+  window.location.href='admin_login.html';
+}
+
+function logout(){
+  localStorage.removeItem('loggedIn');
+  window.location.href='index.html';
+}
+
+/* ===== Registered Employees ===== */
+function showRegisteredEmployees(){
+  const tableContainer=document.getElementById('tableContainer');
+  const emptyBox=document.getElementById('emptyBox');
+  const tbody=document.querySelector('#employeeTable tbody');
+  tbody.innerHTML='';
+
+  const users=JSON.parse(localStorage.getItem('users')) || [];
+  const registered=users.filter(u=>u.role==='employee' && u.appliedJob===true);
+
+  if(registered.length===0){
+    tableContainer.style.display='none';
+    emptyBox.style.display='block';
+    emptyBox.textContent="No registered employees found!";
+    return;
+  }
+
+  tableContainer.style.display='block';
+  emptyBox.style.display='none';
+
+  registered.forEach(u=>{
+    let statusColor='#FF9800'; // Pending
+    if(u.status==='confirmed') statusColor='#4CAF50';
+    else if(u.status==='cancelled') statusColor='#f44336';
+
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td>${u.id}</td>
+      <td>${u.name}</td>
+      <td>${u.email}</td>
+      <td style="color:${statusColor}; font-weight:bold;">${u.status || 'pending'}</td>
+      <td>
+        ${u.status==='pending' ? `<button class="action-btn confirm-btn" onclick="updateStatus(${u.id},'confirmed')">Confirm</button>
+        <button class="action-btn cancel-btn" onclick="updateStatus(${u.id},'cancelled')">Cancel</button>` : ''}
+      </td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function updateStatus(id,newStatus){
+  let users=JSON.parse(localStorage.getItem('users')) || [];
+  let user=users.find(u=>u.id===id);
+  if(user){
+    user.status=newStatus;
+    user.addedByAdmin=(newStatus==='confirmed');
+    if(newStatus==='cancelled'){ 
+      user.appliedJob=false; // allow re-apply
+      user.addedByAdmin=false;
+    }
+    localStorage.setItem('users',JSON.stringify(users));
+    showRegisteredEmployees();
+  }
+}
+
+/* ===== View Employees ===== */
+let currentEmpId=null;
+function showViewEmployees(){
+  const tableContainer=document.getElementById('tableContainer');
+  const emptyBox=document.getElementById('emptyBox');
+  const tbody=document.querySelector('#employeeTable tbody');
+  tbody.innerHTML='';
+
+  const users=JSON.parse(localStorage.getItem('users')) || [];
+  const confirmed=users.filter(u=>u.role==='employee' && u.addedByAdmin);
+
+  if(confirmed.length===0){
+    tableContainer.style.display='none';
+    emptyBox.style.display='block';
+    emptyBox.textContent='No confirmed employees found!';
+    return;
+  }
+
+  tableContainer.style.display='block';
+  emptyBox.style.display='none';
+
+  confirmed.forEach(u=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td>${u.id}</td>
+      <td>${u.name}</td>
+      <td>${u.email}</td>
+      <td style="color:#4CAF50; font-weight:bold;">${u.status}</td>
+      <td>
+        <button class="action-btn info-btn" onclick="openInfoModal(${u.id})">Info</button>
+        <button class="action-btn delete-btn" onclick="openDelete(${u.id})">Delete</button>
+      </td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+/* Info Modal */
+const infoModal=document.getElementById('infoModal');
+const modalName=document.getElementById('modalName');
+const modalEmail=document.getElementById('modalEmail');
+const modalStatus=document.getElementById('modalStatus');
+const modalAddress=document.getElementById('modalAddress');
+const modalDepartment=document.getElementById('modalDepartment');
+const modalSkills=document.getElementById('modalSkills');
+const modalDob=document.getElementById('modalDob');
+
+function openInfoModal(id){
+  currentEmpId=id;
+  const users=JSON.parse(localStorage.getItem('users')) || [];
+  const user=users.find(u=>u.id===id);
+  if(user){
+    modalName.value=user.name;
+    modalEmail.value=user.email;
+    modalStatus.value=user.status || '';
+    modalAddress.value=user.profile?.address || '';
+    modalDepartment.value=user.profile?.department || '';
+    modalSkills.value=user.profile?.skills || '';
+    modalDob.value=user.profile?.dob || '';
+    infoModal.style.display='flex';
+  }
+}
+
+function closeModal(){ infoModal.style.display='none'; }
+
+/* Delete */
+const deleteBox=document.getElementById('deleteBox');
+function openDelete(id){ currentEmpId=id; deleteBox.style.display='flex'; }
+function cancelDelete(){ deleteBox.style.display='none'; }
+function confirmDelete(){
+  let users=JSON.parse(localStorage.getItem('users')) || [];
+  users=users.filter(u=>u.id!==currentEmpId);
+  localStorage.setItem('users',JSON.stringify(users));
+  deleteBox.style.display='none';
+  showViewEmployees();
+  alert('Employee deleted successfully!');
+}
+</script>
+
+</body>
+</html>

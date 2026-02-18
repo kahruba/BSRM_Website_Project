@@ -1,0 +1,166 @@
+/* Reset & general body */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f7fa; /* Default background for other pages */
+  height: 100vh;
+}
+
+/* Add background only for employee_dashboard.html */
+body.employee-dashboard {
+  background: url('images/factory.png') no-repeat center center;
+  background-size: cover;
+}
+
+/* Login / Info box styling */
+.login-container {
+  background: linear-gradient(135deg, #0072ff, #00c6ff);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  width: 380px;
+  text-align: center;
+  color: #fff;
+}
+
+h2 {
+  margin-bottom: 18px;
+}
+
+p {
+  margin: 6px 0 16px;
+}
+
+input[type="text"], input[type="email"], input[type="password"], input[type="number"], input[type="date"], select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: none;
+  box-sizing: border-box;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background: #00c6ff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+button:hover {
+  background: #0072ff;
+}
+
+/* Message text */
+#message {
+  margin-top: 12px;
+  font-weight: bold;
+}
+
+/* Dashboard / Admin Cards */
+.dashboard-wrapper {
+  background-color: #f0f2f5; /* No picture */
+  width: 100%;
+  min-height: 100vh;
+  padding: 0;
+}
+
+header {
+  background-color: #0072ff;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+}
+
+nav {
+  background-color: #333;
+}
+
+nav ul {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 8px 0;
+  margin: 0;
+  gap: 10px;
+}
+
+nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+}
+
+nav ul li a:hover {
+  background: #575757;
+}
+
+/* Cards */
+.cards {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 30px;
+}
+
+.card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  width: 220px;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+}
+
+/* Tables for employees */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+}
+
+.table th, .table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+.table thead {
+  background: #0072ff;
+  color: #fff;
+}
+
+.action-btn {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.edit-btn { background: #4CAF50; }
+.delete-btn { background: #f44336; }
+.view-btn { background: #0072ff; }
+
+.center { text-align: center; }
+.small { font-size: 13px; color: #666; }
+
+
+

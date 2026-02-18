@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Add New Employee - BSRM</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #011128;
+    margin: 0;
+    padding: 0;
+  }
+
+  header {
+    width: 100%;
+    background-color: #0072ff;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
+
+  header h1 { margin: 0; font-size: 28px; }
+  header p { margin: 5px 0 0 0; }
+
+  .form-container {
+    background: #fff;
+    width: 400px;
+    max-width: 90%;
+    margin: 40px auto;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  }
+
+  h2 { text-align: center; color: #0072ff; margin-bottom: 20px; }
+
+  .input-group {
+    margin-bottom: 15px;
+  }
+
+  .input-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+  }
+
+  .input-group input, .input-group select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+
+  button {
+    width: 100%;
+    padding: 12px;
+    background: #0072ff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.25s;
+  }
+
+  button:hover { background: #005fcc; }
+
+  #message {
+    margin-top: 12px;
+    font-weight: bold;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Add New Employee</h1>
+</header>
+
+<div class="form-container">
+  <h2>Employee Info</h2>
+  <form id="addEmployeeForm">
+    <div class="input-group">
+      <label>Full Name</label>
+      <input type="text" id="name" required>
+    </div>
+    <div class="input-group">
+      <label>Email</label>
+      <input type="email" id="email" required>
+    </div>
+    <div class="input-group">
+      <label>Password</label>
+      <input type="password" id="password" required>
+    </div>
+    <div class="input-group">
+      <label>Status</label>
+      <select id="status" required>
+        <option value="pending">Pending</option>
+        <option value="confirmed">Confirmed</option>
+        <option value="cancelled">Cancelled</option>
+      </select>
+    </div>
+    <button type="submit">Add Employee</button>
+    <p id="message"></p>
+  </form>
+</div>
+
+<script>
+  const logged = JSON.parse(localStorage.getItem('loggedIn'));
+  if(!logged || logged.role !== 'admin'){
+    alert('Access denied. Please log in as admin.');
+    window.location.href = 'admin_login.html';
+  }
+
+  const form = document.getElementById('addEmployeeForm');
+  const message = document.getElementById('message');
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+
+    let users = JSON.parse(localStorage.getItem('users')) || [];
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const status = document.getElementById('status').value;
+
+    if(users.find(u => u.email === email)){
+      message.textContent = "❌ Email already exists!";
+      message.style.color = "red";
+      return;
+    }
+
+    const newUser = {
+      id: users.length ? users[users.length-1].id + 1 : 1,
+      name,
+      email,
+      password,
+      status,
+      role: 'employee',
+      profile: {}
+    };
+
+    users.push(newUser);
+    localStorage.setItem('users', JSON.stringify(users));
+
+    message.textContent = "✅ Employee added successfully!";
+    message.style.color = "green";
+    form.reset();
+  });
+</script>
+
+</body>
+</html>
