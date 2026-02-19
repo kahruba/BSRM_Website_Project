@@ -56,7 +56,7 @@ ________________________________________________________________
  
   •	Local storage (frontend version) + Django database (backend version)
   ___________________________________________________________________
-# 🛠️ Tech Stack
+ 🛠️ Tech Stack
 
 # Frontend
 
@@ -112,7 +112,7 @@ Prerequisites
 	
   •	Git installed (optional but recommended)
 ___________________________________________________________________
-# Installation
+ Installation
 # Clone the repository
 git clone https://github.com/you cd office_emp_proj
 
@@ -170,7 +170,7 @@ ___________________________________________________________________
 
 manage.py            - Django project root
 ____________________________________________________________________
-#🔒 Security
+# 🔒 Security
 	
   •	CSRF protection enabled
 	
