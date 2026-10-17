@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Employee Login - BSRM</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Login page specific styles */
+    body {
+      /* Background image from backend */
+      background-image: url('images/login-bg.png');
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: cover;
+
+      font-family: Arial, sans-serif;
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .login-container {
+      background: #ffffff;
+      padding: 40px 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+      width: 380px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+      text-align: left;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #0072ff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #005fcc;
+    }
+
+    #message {
+      margin-top: 12px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    /* Register link properly centered below button */
+    .register-link {
+      display: block;
+      margin-top: 15px;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .register-link a {
+      color: #0072ff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .register-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <h2>Employee Login</h2>
+    <form id="loginForm">
+      <div class="input-group">
+        <label>Email:</label>
+        <input type="email" id="email" required>
+      </div>
+      <div class="input-group">
+        <label>Password:</label>
+        <input type="password" id="password" required>
+      </div>
+      <button type="submit">Login</button>
+      <p id="message"></p>
+    </form>
+    <!-- Fully centered below the login button -->
+    <span class="register-link"><a href="employee_register.html">Register Here</a></span>
+  </div>
+
+  <script>
+    const loginForm = document.getElementById('loginForm');
+    const message = document.getElementById('message');
+
+    loginForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+      const foundUser = users.find(u => u.email === email && u.password === password);
+
+      if(foundUser){
+        // ✅ Add id to loggedIn object for proper dashboard logic
+        localStorage.setItem('loggedIn', JSON.stringify({ 
+          id: foundUser.id,
+          email: foundUser.email, 
+          role: 'employee', 
+          name: foundUser.name 
+        }));
+        message.textContent = "✅ Login successful! Redirecting...";
+        message.style.color = "green";
+        setTimeout(() => { window.location.href = 'employee_dashboard.html'; }, 1200);
+      } else {
+        message.textContent = "❌ Invalid email or password!";
+        message.style.color = "red";
+      }
+    });
+  </script>
+
+</body>
+</html>
+

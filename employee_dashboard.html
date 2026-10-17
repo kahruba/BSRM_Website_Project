@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Employee Dashboard - BSRM</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+body {
+  margin:0; 
+  padding:0; 
+  font-family:Arial,sans-serif; 
+  min-height:100vh; 
+  background: url('images/employee-bg.png') no-repeat center center;
+  background-size: cover;
+  display:flex; 
+  flex-direction:column; 
+  align-items:center;
+}
+
+header { 
+  width:100%; 
+  background:#0072ff; 
+  color:#fff; 
+  padding:20px 0; 
+  text-align:center; 
+  box-shadow:0 4px 10px rgba(0,0,0,0.2); 
+  margin-bottom:20px;
+  overflow:hidden;
+}
+
+/* Scrolling message like backend */
+header p.scrolling-msg {
+  display:inline-block;
+  white-space:nowrap;
+  padding-left:100%;
+  font-weight:bold;
+  font-size:18px;
+  letter-spacing:1px;
+  color:#fff;
+  animation: slide-left 20s linear infinite;
+}
+
+@keyframes slide-left {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-100%); }
+}
+
+.cards { 
+  display:flex; 
+  flex-wrap:wrap; 
+  gap:15px; 
+  justify-content:center; 
+  width:90%; 
+  max-width:1000px; 
+  margin-bottom:30px;
+}
+
+.card { 
+  background:#f1f2f3; 
+  width:210px; height:90px; 
+  border-radius:12px; 
+  box-shadow:0 6px 20px rgba(0,0,0,0.1); 
+  display:flex; 
+  flex-direction:column; 
+  justify-content:center; 
+  align-items:center; 
+  cursor:pointer; 
+  transition: transform 0.2s, box-shadow 0.2s; 
+  text-align:center; 
+  padding:10px;
+}
+
+.card:hover { 
+  transform:translateY(-6px); 
+  box-shadow:0 12px 24px rgba(3,1,16,0.15); 
+}
+
+.card h3 { margin:0; color:#0072ff; font-size:16px; }
+.card p { margin:4px 0 0 0; color:#555; font-size:12px; }
+
+.status-box { 
+  font-weight:bold; 
+  padding:6px 10px; 
+  border-radius:6px; 
+  color:#1c0864; 
+  margin-bottom:8px; 
+  text-align:center; 
+  min-width:150px; 
+  font-size:13px; 
+}
+
+/* Overlay styles for Company Policies */
+.overlay {
+  position: fixed;
+  top:0; left:0; right:0; bottom:0;
+  background: rgba(0,0,0,0.8);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.overlay-content {
+  background: #fff;
+  padding:25px;
+  border-radius:12px;
+  width:90%;
+  max-width:500px;
+  max-height:90%;
+  overflow-y:auto;
+  box-shadow:0 0 25px rgba(0,0,0,0.3);
+}
+
+.overlay-content h2 {
+  text-align:center;
+  color:#0072ff;
+  margin-bottom:20px;
+}
+
+.overlay-content ul {
+  list-style-type: disc;
+  padding-left: 20px;
+  font-size:15px;
+}
+
+.overlay-content button {
+  margin-top:15px;
+  padding:10px 20px;
+  background:#0072ff;
+  color:#fff;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  font-weight:bold;
+}
+.overlay-content button:hover { background:#005fcc; }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="scrolling-msg">Welcome to BSRM Employee Dashboard! Check your application status daily and stay updated with all new announcements!</p>
+</header>
+
+<!-- Dashboard cards container -->
+<div class="cards" id="dashboardCards"></div>
+
+<!-- Company Policies Overlay -->
+<div id="rulesOverlay" class="overlay">
+  <div class="overlay-content">
+    <h2>Company Policies</h2>
+    <ul>
+      <li>Always wear your ID card within company premises.</li>
+      <li>Follow work hours strictly from 9:00 AM to 6:00 PM.</li>
+      <li>Maintain professional behavior with colleagues and clients.</li>
+      <li>Report any security issues immediately to the supervisor.</li>
+      <li>Use company resources responsibly and ethically.</li>
+      <li>Apply for leaves in advance and get manager approval.</li>
+      <li>Ensure workplace hygiene and cleanliness.</li>
+      <li>Follow all safety protocols and emergency procedures.</li>
+    </ul>
+    <button onclick="hideRules()">Back to Dashboard</button>
+  </div>
+</div>
+
+<script>
+const logged = JSON.parse(localStorage.getItem('loggedIn'));
+if(!logged || logged.role!=='employee'){
+  alert('Access denied. Please log in as employee.');
+  window.location.href='employee_login.html';
+}
+
+let users = JSON.parse(localStorage.getItem('users')) || [];
+let userIndex = users.findIndex(u => u.id === logged.id);
+let user = userIndex !== -1 ? users[userIndex] : null;
+
+const cardsDiv = document.getElementById('dashboardCards');
+
+// Logout function
+function logout(){
+  localStorage.removeItem('loggedIn');
+  window.location.href='index.html';
+}
+
+// Determine status color
+function getStatusColor(status){
+  switch(status){
+    case 'pending': return '#FF9800';
+    case 'confirmed': return '#4CAF50';
+    case 'cancelled': return '#f44336';
+    default: return '#777';
+  }
+}
+
+// --- Apply for Job Card (if not applied or cancelled) ---
+if(user && (!user.appliedJob || user.status==='cancelled')){
+  const applyCard = document.createElement('div');
+  applyCard.classList.add('card');
+  applyCard.onclick = () => window.location.href='apply_job.html';
+  applyCard.innerHTML = `
+    <h3>Apply for Job</h3>
+    <p>${user.status==='cancelled' ? 'Re-apply now' : 'Submit your application'}</p>
+  `;
+  cardsDiv.appendChild(applyCard);
+}
+
+// --- Status Card (if already applied) ---
+if(user && user.appliedJob){
+  const statusCard = document.createElement('div');
+  statusCard.classList.add('card');
+  const color = getStatusColor(user.status || 'pending');
+  const statusText = user.status || 'Pending';
+  statusCard.innerHTML = `
+    <div class="status-box" style="background:${color}">${statusText}</div>
+    <h3>Status</h3>
+    <p>Your application status</p>
+  `;
+  cardsDiv.appendChild(statusCard);
+}
+
+// --- My Profile Card (if confirmed by admin) ---
+if(user && user.addedByAdmin){
+  const profileCard = document.createElement('div');
+  profileCard.classList.add('card');
+  profileCard.onclick = () => window.location.href='employee_profile.html';
+  profileCard.innerHTML = `
+    <h3>My Profile</h3>
+    <p>View / Edit profile</p>
+  `;
+  cardsDiv.appendChild(profileCard);
+}
+
+// --- Company Policies Card ---
+const policiesCard = document.createElement('div');
+policiesCard.classList.add('card');
+policiesCard.onclick = () => document.getElementById('rulesOverlay').style.display='flex';
+policiesCard.innerHTML = `
+  <h3>Company Policies</h3>
+  <p>View rules & guidelines</p>
+`;
+cardsDiv.appendChild(policiesCard);
+
+// --- Logout Card ---
+const logoutCard = document.createElement('div');
+logoutCard.classList.add('card');
+logoutCard.onclick = logout;
+logoutCard.innerHTML = `
+  <h3>Logout</h3>
+  <p>Exit Dashboard</p>
+`;
+cardsDiv.appendChild(logoutCard);
+
+// --- Overlay functions ---
+function showRules() { document.getElementById('rulesOverlay').style.display='flex'; }
+function hideRules() { document.getElementById('rulesOverlay').style.display='none'; }
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

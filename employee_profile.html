@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>My Profile - BSRM</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+body { font-family:Arial,sans-serif; background:#c7046c; margin:0; padding:0; display:flex; justify-content:center; align-items:center; min-height:100vh; }
+.profile-container { background:#e877cc; padding:30px; border-radius:12px; width:400px; max-width:90%; box-shadow:0 6px 20px rgba(0,0,0,0.1); }
+h2 { text-align:center; color:#e60a74d7; margin-bottom:20px; }
+.input-group { margin-bottom:15px; }
+.input-group label { display:block; margin-bottom:5px; font-weight:bold; color:#333; }
+.input-group input, .input-group textarea { width:100%; padding:10px; border-radius:6px; border:1px solid #ef96ca; box-sizing:border-box; }
+button { width:100%; padding:12px; background:#d81f82; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold; transition:0.25s; }
+button:disabled { background:#fab2da; cursor:not-allowed; }
+button:hover:enabled { background:#e88dbf; }
+#message { margin-top:12px; font-weight:bold; text-align:center; }
+.status-box { font-weight:bold; padding:10px; border-radius:6px; display:block; text-align:center; color:#ffb9e4; margin-top:20px; }
+</style>
+</head>
+<body>
+
+<div class="profile-container" id="profileBox">
+  <h2>My Profile</h2>
+  <form id="profileForm">
+    <div class="input-group">
+      <label>Name</label>
+      <input type="text" id="name" required>
+    </div>
+    <div class="input-group">
+      <label>Email</label>
+      <input type="email" id="email" required>
+    </div>
+    <div class="input-group">
+      <label>Address</label>
+      <textarea id="address" rows="2"></textarea>
+    </div>
+    <div class="input-group">
+      <label>Department</label>
+      <input type="text" id="department">
+    </div>
+    <div class="input-group">
+      <label>Skills</label>
+      <input type="text" id="skills">
+    </div>
+    <div class="input-group">
+      <label>Date of Birth</label>
+      <input type="date" id="dob">
+    </div>
+    <button type="submit">Save</button>
+    <p id="message"></p>
+  </form>
+</div>
+
+<script>
+const logged = JSON.parse(localStorage.getItem('loggedIn'));
+if(!logged || logged.role!=='employee'){
+  alert('Access denied.');
+  window.location.href='employee_login.html';
+}
+
+let users = JSON.parse(localStorage.getItem('users')) || [];
+let user = users.find(u => u.id === logged.id);
+
+const profileForm = document.getElementById('profileForm');
+const profileBox = document.getElementById('profileBox');
+const message = document.getElementById('message');
+
+if(!user){
+  profileBox.innerHTML = "<p style='color:red; font-weight:bold; text-align:center;'>No profile found.</p>";
+} else {
+  // Status handling
+  let statusText = '';
+  let statusColor = '';
+
+  if(user.addedByAdmin && user.status==='confirmed'){
+    statusText = 'Confirmed';
+    statusColor = '#4CAF50';
+    profileForm.querySelector('#name').value = user.name;
+    profileForm.querySelector('#email').value = user.email;
+    profileForm.querySelector('#address').value = user.profile?.address || '';
+    profileForm.querySelector('#department').value = user.profile?.department || '';
+    profileForm.querySelector('#skills').value = user.profile?.skills || '';
+    profileForm.querySelector('#dob').value = user.profile?.dob || '';
+    profileForm.querySelector('button').disabled = false;
+    document.querySelector('h2').textContent = "Welcome to our company!";
+  } else if(user.status==='cancelled'){
+    statusText = 'Cancelled';
+    statusColor = '#f44336';
+    profileBox.innerHTML = `<h2>My Profile</h2>
+      <span class="status-box" style="background:${statusColor}">Sorry, you cannot join our company</span>`;
+  } else {
+    statusText = 'Pending';
+    statusColor = '#FF9800';
+    profileBox.innerHTML = `<h2>My Profile</h2>
+      <span class="status-box" style="background:${statusColor}">Pending</span>`;
+  }
+}
+
+profileForm.addEventListener('submit', function(e){
+  e.preventDefault();
+  if(!user.addedByAdmin){
+    message.style.color='red';
+    message.textContent="Cannot edit until admin confirms your application.";
+    return;
+  }
+
+  user.profile = {
+    address: document.getElementById('address').value.trim(),
+    department: document.getElementById('department').value.trim(),
+    skills: document.getElementById('skills').value.trim(),
+    dob: document.getElementById('dob').value
+  };
+
+  users = users.map(u => u.id===user.id ? user : u);
+  localStorage.setItem('users', JSON.stringify(users));
+
+  message.style.color='green';
+  message.textContent="Profile saved successfully!";
+});
+</script>
+
+</body>
+</html>

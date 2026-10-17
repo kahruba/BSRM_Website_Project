@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Login - BSRM</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Admin login specific styling */
+    body {
+      /* Background image from backend */
+      background-image: url('images/login-bg.png');
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: cover;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .login-box {
+      background: rgba(0, 114, 255, 0.85); /* semi-transparent gradient look */
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      width: 380px;
+      text-align: center;
+      color: white;
+    }
+
+    .login-box h2 {
+      margin-bottom: 20px;
+    }
+
+    .login-box input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: none;
+      box-sizing: border-box;
+    }
+
+    .login-box button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 12px;
+      border: none;
+      border-radius: 6px;
+      background-color: #f88f3a;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.25s;
+    }
+
+    .login-box button:hover {
+      background-color: #e68900;
+    }
+
+    #message {
+      margin-top: 12px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h2>Admin Login</h2>
+    <input type="email" id="adminEmail" placeholder="Enter Admin Email" required>
+    <input type="password" id="adminPass" placeholder="Enter Password" required>
+    <button id="loginBtn">Login</button>
+    <p id="message"></p>
+  </div>
+
+  <script>
+    // Fixed admin credentials
+    const adminCreds = {
+      email: "admin@bsrm.com",
+      password: "admin123"
+    };
+
+    document.getElementById('loginBtn').addEventListener('click', function(){
+      const email = document.getElementById('adminEmail').value.trim();
+      const pass = document.getElementById('adminPass').value;
+
+      const message = document.getElementById('message');
+
+      if(email === adminCreds.email && pass === adminCreds.password){
+        // Save login in localStorage
+        localStorage.setItem('loggedIn', JSON.stringify({role: 'admin', name: 'BSRM Admin', email}));
+        message.textContent = "✅ Login successful! Redirecting...";
+        message.style.color = "lightgreen";
+
+        setTimeout(()=>{
+          window.location.href = "dashboard_admin.html"; // admin dashboard
+        }, 1000);
+      } else {
+        message.textContent = "❌ Invalid email or password";
+        message.style.color = "red";
+      }
+    });
+  </script>
+</body>
+</html>

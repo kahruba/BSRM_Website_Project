@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Apply for Job - BSRM</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+body {
+  margin:0; 
+  font-family:Arial,sans-serif;
+  
+  /* Add employee background image */
+  background: url('images/employee-bg.png') no-repeat center center;
+  background-size: cover;
+
+  display:flex; 
+  justify-content:center; 
+  align-items:center; 
+  min-height:100vh;
+}
+
+.form-container {
+  background: rgba(255,255,255,0.95); /* slightly transparent to show background */
+  padding:30px; 
+  border-radius:12px; 
+  width:400px; 
+  max-width:90%;
+  box-shadow:0 6px 20px rgba(0,0,0,0.1);
+}
+
+h2 { 
+  text-align:center; 
+  color:#0072ff; 
+  margin-bottom:20px; 
+}
+
+.input-group { 
+  margin-bottom:15px; 
+}
+
+.input-group label { 
+  display:block; 
+  margin-bottom:5px; 
+  font-weight:bold; 
+  color:#333; 
+}
+
+.input-group input, .input-group textarea { 
+  width:100%; 
+  padding:10px; 
+  border-radius:6px; 
+  border:1px solid #ccc; 
+  box-sizing:border-box; 
+}
+
+button {
+  width:100%; 
+  padding:12px; 
+  background:#0072ff; 
+  color:#fff; 
+  border:none; 
+  border-radius:6px;
+  cursor:pointer; 
+  font-weight:bold; 
+  transition:0.25s;
+}
+
+button:hover { 
+  background:#005fcc; 
+}
+
+#message { 
+  margin-top:12px; 
+  font-weight:bold; 
+  text-align:center; 
+}
+
+.status-box { 
+  font-weight:bold; 
+  padding:12px; 
+  border-radius:6px; 
+  display:block; 
+  text-align:center; 
+  color:#fff; 
+  margin-top:20px; 
+}
+</style>
+</head>
+<body>
+
+<div class="form-container" id="formBox">
+<h2>Apply for Job</h2>
+<form id="jobForm">
+  <div class="input-group">
+    <label>Name</label>
+    <input type="text" id="name" required>
+  </div>
+  <div class="input-group">
+    <label>Email</label>
+    <input type="email" id="email" required>
+  </div>
+  <div class="input-group">
+    <label>Address</label>
+    <textarea id="address" rows="2" required></textarea>
+  </div>
+  <div class="input-group">
+    <label>Department</label>
+    <input type="text" id="department" required>
+  </div>
+  <div class="input-group">
+    <label>Skills</label>
+    <input type="text" id="skills">
+  </div>
+  <div class="input-group">
+    <label>Date of Birth</label>
+    <input type="date" id="dob" required>
+  </div>
+  <button type="submit">Submit Application</button>
+</form>
+<div id="message"></div>
+</div>
+
+<script>
+// Check employee login
+const logged = JSON.parse(localStorage.getItem('loggedIn'));
+if(!logged || logged.role !== 'employee'){
+  alert('Access denied. Employee login required.');
+  window.location.href = 'employee_login.html';
+}
+
+let users = JSON.parse(localStorage.getItem('users')) || [];
+let userIndex = users.findIndex(u => u.id === logged.id);
+let user = userIndex !== -1 ? users[userIndex] : null;
+
+const formBox = document.getElementById('formBox');
+const form = document.getElementById('jobForm');
+const message = document.getElementById('message');
+
+// Pre-fill name and email
+if(user){
+  document.getElementById('name').value = user.name;
+  document.getElementById('email').value = user.email;
+
+  // If previously cancelled, allow re-apply
+  if(user.status==='cancelled'){
+    user.appliedJob = false;
+    user.status = '';
+    user.addedByAdmin = false;
+    users[userIndex] = user;
+    localStorage.setItem('users', JSON.stringify(users));
+  }
+
+  // Already applied (not cancelled)
+  if(user.appliedJob && user.status!=='cancelled'){
+    formBox.innerHTML = `<h2>Apply for Job</h2>
+      <span class="status-box" style="background:#FF9800">You have already applied!</span>`;
+  }
+}
+
+// Form submit
+form?.addEventListener('submit', function(e){
+  e.preventDefault();
+
+  const updatedUser = {
+    ...user,
+    profile: {
+      address: document.getElementById('address').value.trim(),
+      department: document.getElementById('department').value.trim(),
+      skills: document.getElementById('skills').value.trim(),
+      dob: document.getElementById('dob').value
+    },
+    appliedJob: true,
+    status: 'pending',
+    addedByAdmin: false
+  };
+
+  users[userIndex] = updatedUser;
+  localStorage.setItem('users', JSON.stringify(users));
+
+  formBox.innerHTML = `<h2>Apply for Job</h2>
+    <span class="status-box" style="background:#FF9800">✅ Application submitted successfully! Status: Pending</span>`;
+
+  setTimeout(() => {
+    window.location.href = 'employee_dashboard.html';
+  }, 1500);
+});
+</script>
+
+</body>
+</html>
+

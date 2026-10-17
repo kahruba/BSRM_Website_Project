@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome to BSRM</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      overflow-x: hidden;
+      color: #fff;
+    }
+
+    /* News Ticker */
+    .news-ticker {
+      width: 100%;
+      background: #111; 
+      overflow: hidden;
+      white-space: nowrap;
+      box-sizing: border-box;
+      border-bottom: 2px solid #efd56fff;
+      height: 50px;
+      display: flex;
+      align-items: center;
+    }
+
+    .news-ticker p {
+      display: inline-block;
+      font-size: 24px; 
+      font-weight: bold;
+      padding-left: 100%;
+      animation: scroll-left 20s linear infinite;
+      color: #fdfdf8ff;
+    }
+
+    @keyframes scroll-left {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    /* Hero Section Slider */
+    .hero-bg {
+      position: relative;
+      height: 85vh;
+      overflow: hidden;
+    }
+
+    .slides {
+      position: relative;
+      height: 100%;
+    }
+
+    .slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center center;
+    }
+
+    .slide.active { opacity: 1; }
+
+    .front-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(0,0,0,0.6);
+      padding: 40px 30px;
+      border-radius: 12px;
+      max-width: 500px;
+      text-align: center;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+      z-index: 10;
+    }
+
+    .front-container h1 {
+      margin-bottom: 16px;
+      font-size: 32px;
+      color: #ffeb3b;
+    }
+
+    .front-container p {
+      margin-bottom: 30px;
+      font-size: 18px;
+      color: #ffffff;
+    }
+
+    .front-container button {
+      padding: 12px 25px;
+      margin: 8px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+
+    .btn-admin { background-color: #f44336; color: #fff; }
+    .btn-employee { background-color: #4CAF50; color: #fff; }
+    .btn-about { background-color: #2196F3; color: #fff; }
+
+    .front-container button:hover {
+      opacity: 0.85;
+      transform: scale(1.05);
+    }
+
+    /* Slider Arrows */
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 50px;
+      color: #fff;
+      padding: 10px 20px;
+      cursor: pointer;
+      z-index: 15;
+      background: rgba(0,0,0,0.3);
+      border-radius: 8px;
+      user-select: none;
+      transition: 0.3s;
+    }
+
+    .arrow:hover { background: rgba(0,0,0,0.5); }
+
+    .arrow-left { left: 20px; }
+    .arrow-right { right: 20px; }
+
+    /* Products & Services Section */
+    .products-section {
+      background: url("images/blur-bg.png") no-repeat center center/cover;
+      padding: 60px 20px 40px 20px;
+      color: #fff;
+    }
+
+    .products-section h2 {
+      font-size: 36px;
+      color: #f2f1eaff;
+      margin-bottom: 50px;
+      text-align: center;
+    }
+
+    .product-row {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .product-img {
+      width: 160px;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 12px;
+      transition: transform 0.3s, box-shadow 0.3s, opacity 0.8s;
+      opacity: 0;
+      transform: translateY(50px);
+    }
+
+    .product-img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    }
+
+    .product-img.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* News & Updates Section */
+    .news-section {
+      background: #eeececff;
+      padding: 60px 20px 80px 20px;
+      color: #fff;
+    }
+
+    .news-section h2 {
+      font-size: 36px;
+      color: #0e0d0dff;
+      margin-bottom: 50px;
+      text-align: center;
+    }
+
+    .news-row {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .news-img {
+      width: 32%;
+      max-width: 300px;
+      max-height: 200px;
+      object-fit: contain; 
+      border-radius: 12px;
+      transition: transform 0.3s, opacity 0.8s;
+      opacity: 0;
+    }
+
+    .news-img.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .news-img:hover { transform: scale(1.05); }
+
+    /* Achievements Section */
+    .achievements-section {
+      background: #222;
+      padding: 80px 20px;
+      text-align: center;
+    }
+
+    .achievements-section h2 {
+      font-size: 36px;
+      color: #ffeb3b;
+      margin-bottom: 50px;
+    }
+
+    .counters {
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+      flex-wrap: wrap;
+    }
+
+    .counter {
+      font-size: 28px;
+      font-weight: bold;
+      color: #ffeb3b;
+    }
+
+    .counter-label {
+      font-size: 18px;
+      color: #fff;
+      margin-top: 5px;
+    }
+
+    /* Footer */
+    .footer {
+      background: #111;
+      padding: 50px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      color: #fff;
+      gap: 20px;
+    }
+
+    .footer h3 {
+      color: #ffeb3b;
+      margin-bottom: 10px;
+    }
+
+    .footer p, .footer a {
+      color: #fff;
+      text-decoration: none;
+      margin: 2px 0;
+      display: block;
+    }
+
+    .social-links a {
+      display: inline-block;
+      background: #ffeb3b;
+      color: #111;
+      padding: 5px 12px;
+      margin-right: 8px;
+      border-radius: 6px;
+      font-weight: bold;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .social-links a:hover {
+      background: #fff;
+      color: #111;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- News Ticker -->
+  <div class="news-ticker">
+    <p>Latest Update: BSRM proudly launches a new range of high-quality steel products across Bangladesh!</p>
+  </div>
+
+  <!-- Hero Slider -->
+  <div class="hero-bg">
+    <div class="arrow arrow-left" onclick="prevSlide()">&#10094;</div>
+    <div class="arrow arrow-right" onclick="nextSlide()">&#10095;</div>
+
+    <div class="slides">
+      <div class="slide active" style="background-image: url('images/bsrm-bg.png');"></div>
+      <div class="slide" style="background-image: url('images/product6-bg.png');"></div>
+      <div class="slide" style="background-image: url('images/product7-bg.png');"></div>
+    </div>
+
+    <div class="front-container">
+      <h1>Welcome to BSRM</h1>
+      <p>We provide high-quality steel products and solutions</p>
+      <div>
+        <button class="btn-admin" onclick="location.href='admin_login.html'">Admin</button>
+        <button class="btn-employee" onclick="location.href='employee_login.html'">Employee</button>
+        <button class="btn-about" onclick="location.href='about.html'">About</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Products -->
+  <div class="products-section">
+    <h2>Our Products & Services</h2>
+    <div class="product-row">
+      <img src="images/product1-bg.png" class="product-img">
+      <img src="images/product2-bg.png" class="product-img">
+      <img src="images/product3-bg.png" class="product-img">
+      <img src="images/product4-bg.png" class="product-img">
+      <img src="images/product5-bg.png" class="product-img">
+    </div>
+  </div>
+
+  <!-- News -->
+  <div class="news-section">
+    <h2>News & Updates</h2>
+    <div class="news-row">
+      <img src="images/product8-bg.png" class="news-img">
+      <img src="images/product9-bg.png" class="news-img">
+      <img src="images/product10-bg.png" class="news-img">
+    </div>
+  </div>
+
+  <!-- Achievements -->
+  <div class="achievements-section">
+    <h2>Our Achievements</h2>
+    <div class="counters">
+      <div>
+        <div class="counter" data-target="60">0+</div>
+        <div class="counter-label">Years of Experience</div>
+      </div>
+      <div>
+        <div class="counter" data-target="3000">0+</div>
+        <div class="counter-label">Employees</div>
+      </div>
+      <div>
+        <div class="counter" data-target="100">0+</div>
+        <div class="counter-label">Projects Completed</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div><h3>Address</h3><p>123 BSRM Street, Dhaka, Bangladesh</p></div>
+    <div><h3>Phone</h3><p>+880 1234 567890</p></div>
+    <div><h3>Email</h3><p>info@bsrm.com</p></div>
+    <div>
+      <h3>Follow Us</h3>
+      <div class="social-links">
+        <a href="#">Facebook</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Instagram</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Slider Logic
+    const slides = document.querySelectorAll('.slide');
+    let currentSlide = 0;
+
+    function showSlide(index){
+      slides.forEach(s=>s.classList.remove('active'));
+      slides[index].classList.add('active');
+    }
+
+    function nextSlide(){
+      currentSlide = (currentSlide+1) % slides.length;
+      showSlide(currentSlide);
+    }
+
+    function prevSlide(){
+      currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+      showSlide(currentSlide);
+    }
+
+    setInterval(nextSlide, 5000);
+
+    // Fade Reveal
+    document.addEventListener('DOMContentLoaded', () => {
+      const images = document.querySelectorAll('.product-img, .news-img');
+
+      function revealOnScroll(){
+        const windowHeight = window.innerHeight;
+        images.forEach(img => {
+          if(img.getBoundingClientRect().top < windowHeight - 50){
+            img.classList.add('visible');
+          }
+        });
+      }
+      window.addEventListener('scroll', revealOnScroll);
+      revealOnScroll();
+    });
+
+    // Counters
+    const counters = document.querySelectorAll('.counter');
+    counters.forEach(counter=>{
+      const animate = () => {
+        const target = +counter.getAttribute('data-target');
+        let count = +counter.innerText.replace('+','');
+        const increment = Math.ceil(target / 50);
+
+        if(count < target){
+          counter.innerText = `${count+increment}+`;
+          setTimeout(animate, 30);
+        } else {
+          counter.innerText = `${target}+`;
+        }
+      };
+
+      const observer = new IntersectionObserver(entries=>{
+        if(entries[0].isIntersecting){
+          animate();
+          observer.unobserve(counter);
+        }
+      });
+      observer.observe(counter);
+    });
+  </script>
+
+</body>
+</html>
+
