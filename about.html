@@ -1,77 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>About BSRM</title>
-<link rel="stylesheet" href="styles.css">
-<style>
-  body {
-    margin:0;
-    font-family: Arial, sans-serif;
-    background: #0c479e;
-    color: #333;
-  }
-  header {
-    background: #0072ff;
-    color: #fff;
-    text-align: center;
-    padding: 20px 0;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  }
-  header h1 { margin:0; }
-  .about-container {
-    max-width: 800px;
-    margin: 20px auto;   /* কমিয়ে দিলাম */
-    background: #f5f1f1;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-  }
-  .about-container h2 {
-    color: #0072ff;
-    margin-bottom: 15px;
-  }
-  .about-container p {
-    margin-bottom: 15px;
-    line-height: 1.6;
-  }
-  .btn-back {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 10px 20px;
-    background: #0072ff;
-    color: #faf7f7;
-    text-decoration: none;
-    border-radius: 6px;
-    font-weight: bold;
-    transition: 0.3s;
-  }
-  .btn-back:hover {
-    background: #005fcc;
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About BSRM</title>
+
+  <!-- Existing CSS -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Bootstrap 5.3.3 -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0c479e;
+      color: #333;
+    }
+
+    header {
+      background: #0072ff;
+      color: #fff;
+      text-align: center;
+      padding: 20px 0;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    header h1 {
+      margin: 0;
+    }
+
+    .about-container {
+      width: calc(100% - 40px);
+      max-width: 800px;
+      margin: 20px auto;
+      background: #f5f1f1;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    }
+
+    .about-container h2 {
+      color: #0072ff;
+      margin-bottom: 15px;
+    }
+
+    .about-container p {
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+
+    .btn-back {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #0072ff;
+      color: #faf7f7;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .btn-back:hover {
+      background: #005fcc;
+    }
+
+    /* Tablet responsiveness */
+    @media (max-width: 768px) {
+      .about-container {
+        padding: 25px;
+      }
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 480px) {
+      header {
+        padding: 16px 10px;
+      }
+
+      header h1 {
+        font-size: 26px;
+      }
+
+      .about-container {
+        width: calc(100% - 24px);
+        margin: 12px auto;
+        padding: 20px 16px;
+        border-radius: 10px;
+      }
+
+      .about-container h2 {
+        font-size: 21px;
+        margin-bottom: 12px;
+      }
+
+      .about-container p {
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .btn-back {
+        padding: 10px 16px;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<header>
-  <h1>About BSRM</h1>
-</header>
+  <header>
+    <h1>About BSRM</h1>
+  </header>
 
-<div class="about-container">
-  <h2>Our Company</h2>
-  <p>BSRM is one of the leading steel manufacturing companies in Bangladesh, providing high-quality steel products for industries and construction.</p>
+  <div class="about-container">
+    <h2>Our Company</h2>
+    <p>
+      BSRM is one of the leading steel manufacturing companies in Bangladesh,
+      providing high-quality steel products for industries and construction.
+    </p>
 
-  <h2>Our Mission</h2>
-  <p>To deliver superior steel solutions with commitment to quality, sustainability, and customer satisfaction.</p>
+    <h2>Our Mission</h2>
+    <p>
+      To deliver superior steel solutions with commitment to quality,
+      sustainability, and customer satisfaction.
+    </p>
 
-  <h2>Our Vision</h2>
-  <p>To be the most trusted and innovative steel provider in the country, supporting infrastructure development and industrial growth.</p>
+    <h2>Our Vision</h2>
+    <p>
+      To be the most trusted and innovative steel provider in the country,
+      supporting infrastructure development and industrial growth.
+    </p>
 
-  <h2>Services & Products</h2>
-  <p>We offer a wide range of steel products, including reinforced steel bars, construction steel, and customized steel solutions for industrial projects.</p>
+    <h2>Services &amp; Products</h2>
+    <p>
+      We offer a wide range of steel products, including reinforced steel bars,
+      construction steel, and customized steel solutions for industrial projects.
+    </p>
 
-  <a class="btn-back" href="index.html">Back to Home</a>
-</div>
+    <a class="btn-back" href="index.html">Back to Home</a>
+  </div>
+
+  <!-- Bootstrap JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

@@ -1,193 +1,480 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>View Employees - BSRM</title>
-<link rel="stylesheet" href="styles.css">
-<style>
-body { margin:0; font-family:Arial,sans-serif; background:#f0f2f5; }
-header { width:100%; background-color:#0072ff; color:white; padding:20px; text-align:center; box-shadow:0 4px 10px rgba(0,0,0,0.2);}
-header h1 { margin:0; font-size:28px; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>View Employees - BSRM</title>
 
-.table-container { width:90%; max-width:900px; margin:30px auto; overflow-x:auto; }
-table { width:100%; border-collapse:collapse; background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 6px 14px rgba(0,0,0,0.08);}
-th, td { padding:12px; border-bottom:1px solid #eee; text-align:left; }
-thead { background:#0072ff; color:#fff; }
+  <link rel="stylesheet" href="styles.css">
 
-.action-btn { padding:6px 10px; border:none; border-radius:6px; cursor:pointer; color:#fff; margin-right:4px; }
-.info-btn { background:#4CAF50; }
-.delete-btn { background:#f44336; }
+  <!-- Bootstrap 5.3.3 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-/* Modal for Employee Info */
-.modal-bg { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:1000; }
-.modal { background:#fff; padding:20px; border-radius:12px; width:420px; max-width:90%; box-shadow:0 6px 20px rgba(0,0,0,0.2); text-align:center; }
-.modal h3 { margin-top:0; color:#0072ff; }
-.modal form { text-align:left; }
-.modal .input-group { margin-bottom:12px; }
-.modal .input-group label { display:block; font-weight:bold; margin-bottom:5px; color:#333; }
-.modal .input-group input { width:100%; padding:8px; border-radius:6px; border:1px solid #ccc; background:#f0f4ff; color:#333; box-sizing:border-box; }
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+    }
 
-/* Done button */
-.modal button { padding:10px 20px; border:none; border-radius:6px; cursor:pointer; margin-top:10px; font-weight:bold; color:#fff; background:#0072ff; }
-.modal button:hover { opacity:0.85; }
+    header {
+      width: 100%;
+      background-color: #0072ff;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      box-sizing: border-box;
+    }
 
-/* Delete Confirmation Box */
-.confirm-box { display:none; width:400px; max-width:90%; background:#ffeb3b; color:#333; padding:20px; border-radius:10px; text-align:center; font-weight:bold; box-shadow:0 6px 20px rgba(0,0,0,0.2); margin:20px auto;}
-.confirm-box button { margin:10px 5px; padding:10px 20px; border:none; border-radius:6px; cursor:pointer; font-weight:bold; color:#fff; }
-.yes-btn { background:#4CAF50; }
-.no-btn { background:#f44336; }
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
 
-/* Success message */
-.success-msg { display:none; width:400px; max-width:90%; background:#4CAF50; color:#fff; padding:15px; border-radius:10px; text-align:center; font-weight:bold; box-shadow:0 6px 20px rgba(0,0,0,0.2); margin:20px auto;}
-</style>
+    .table-container {
+      width: 90%;
+      max-width: 900px;
+      margin: 30px auto;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+      width: 100%;
+      min-width: 650px;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    thead {
+      background: #0072ff;
+      color: #fff;
+    }
+
+    .action-btn {
+      padding: 6px 10px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      color: #fff;
+      margin: 3px 4px 3px 0;
+      white-space: nowrap;
+    }
+
+    .info-btn {
+      background: #4CAF50;
+    }
+
+    .delete-btn {
+      background: #f44336;
+    }
+
+    /* Modal for Employee Info */
+    .modal-bg {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: 15px;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+
+    .modal {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      width: 420px;
+      max-width: 100%;
+      max-height: calc(100vh - 30px);
+      overflow-y: auto;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      text-align: center;
+      box-sizing: border-box;
+    }
+
+    .modal h3 {
+      margin-top: 0;
+      color: #0072ff;
+    }
+
+    .modal form {
+      text-align: left;
+    }
+
+    .modal .input-group {
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .modal .input-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #333;
+    }
+
+    .modal .input-group input {
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      background: #f0f4ff;
+      color: #333;
+      box-sizing: border-box;
+    }
+
+    /* Done button */
+    .modal button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+      font-weight: bold;
+      color: #fff;
+      background: #0072ff;
+    }
+
+    .modal button:hover {
+      opacity: 0.85;
+    }
+
+    /* Delete Confirmation Box */
+    .confirm-box {
+      display: none;
+      width: 400px;
+      max-width: calc(100% - 30px);
+      background: #ffeb3b;
+      color: #333;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: bold;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      margin: 20px auto;
+      box-sizing: border-box;
+    }
+
+    .confirm-box button {
+      margin: 10px 5px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .yes-btn {
+      background: #4CAF50;
+    }
+
+    .no-btn {
+      background: #f44336;
+    }
+
+    /* Success message */
+    .success-msg {
+      display: none;
+      width: 400px;
+      max-width: calc(100% - 30px);
+      background: #4CAF50;
+      color: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: bold;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      margin: 20px auto;
+      box-sizing: border-box;
+    }
+
+    @media (max-width: 576px) {
+      header {
+        padding: 18px 12px;
+      }
+
+      header h1 {
+        font-size: 23px;
+      }
+
+      .table-container {
+        width: calc(100% - 24px);
+        margin: 20px auto;
+      }
+
+      th, td {
+        padding: 10px;
+        font-size: 14px;
+      }
+
+      .action-btn {
+        padding: 7px 9px;
+        font-size: 13px;
+      }
+
+      .modal {
+        padding: 18px;
+      }
+
+      .confirm-box {
+        padding: 16px;
+      }
+
+      .confirm-box button {
+        padding: 9px 16px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      header h1 {
+        font-size: 21px;
+      }
+
+      .modal {
+        padding: 14px;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<header>
-  <h1>View Employees</h1>
-</header>
+  <header>
+    <h1>View Employees</h1>
+  </header>
 
-<div class="table-container" id="tableContainer"></div>
+  <div class="table-container" id="tableContainer"></div>
 
-<!-- Modal for Employee Info -->
-<div class="modal-bg" id="modalBg">
-  <div class="modal">
-    <h3>Employee Profile</h3>
-    <form>
-      <div class="input-group">
-        <label>Full Name</label>
-        <input type="text" id="mName" disabled>
-      </div>
-      <div class="input-group">
-        <label>Address</label>
-        <input type="text" id="mAddress" disabled>
-      </div>
-      <div class="input-group">
-        <label>Department</label>
-        <input type="text" id="mDepartment" disabled>
-      </div>
-      <div class="input-group">
-        <label>Skills</label>
-        <input type="text" id="mSkills" disabled>
-      </div>
-      <div class="input-group">
-        <label>Date of Birth</label>
-        <input type="date" id="mDob" disabled>
-      </div>
-      <div class="input-group">
-        <label>Status</label>
-        <input type="text" id="mStatus" disabled>
-      </div>
-      <button type="button" onclick="closeModal()">Done</button>
-    </form>
+  <!-- Modal for Employee Info -->
+  <div class="modal-bg" id="modalBg">
+    <div class="modal">
+      <h3>Employee Profile</h3>
+
+      <form>
+        <div class="input-group">
+          <label for="mName">Full Name</label>
+          <input type="text" id="mName" disabled>
+        </div>
+
+        <div class="input-group">
+          <label for="mAddress">Address</label>
+          <input type="text" id="mAddress" disabled>
+        </div>
+
+        <div class="input-group">
+          <label for="mDepartment">Department</label>
+          <input type="text" id="mDepartment" disabled>
+        </div>
+
+        <div class="input-group">
+          <label for="mSkills">Skills</label>
+          <input type="text" id="mSkills" disabled>
+        </div>
+
+        <div class="input-group">
+          <label for="mDob">Date of Birth</label>
+          <input type="date" id="mDob" disabled>
+        </div>
+
+        <div class="input-group">
+          <label for="mStatus">Status</label>
+          <input type="text" id="mStatus" disabled>
+        </div>
+
+        <button type="button" onclick="closeModal()">Done</button>
+      </form>
+    </div>
   </div>
-</div>
 
-<!-- Delete confirmation box -->
-<div class="confirm-box" id="confirmBox">
-  Do you really want to delete this employee?
-  <div>
-    <button class="yes-btn" onclick="confirmDelete()">Yes</button>
-    <button class="no-btn" onclick="cancelDelete()">Cancel</button>
+  <!-- Delete confirmation box -->
+  <div class="confirm-box" id="confirmBox">
+    Do you really want to delete this employee?
+
+    <div>
+      <button type="button" class="yes-btn" onclick="confirmDelete()">Yes</button>
+      <button type="button" class="no-btn" onclick="cancelDelete()">Cancel</button>
+    </div>
   </div>
-</div>
 
-<!-- Success message -->
-<div class="success-msg" id="successMsg">
-  Employee deleted successfully!
-</div>
+  <!-- Success message -->
+  <div class="success-msg" id="successMsg">
+    Employee deleted successfully!
+  </div>
 
-<script>
-const logged = JSON.parse(localStorage.getItem('loggedIn'));
-if(!logged || logged.role!=='admin'){
-  alert('Access denied. Please log in as admin.');
-  window.location.href='admin_login.html';
-}
+  <script>
+    const logged = JSON.parse(localStorage.getItem('loggedIn'));
 
-let deleteEmpId = null;
+    if (!logged || logged.role !== 'admin') {
+      alert('Access denied. Please log in as admin.');
+      window.location.href = 'admin_login.html';
+    } else {
+      let deleteEmpId = null;
 
-// Render confirmed employees
-function renderEmployees(){
-  const container = document.getElementById('tableContainer');
-  const users = JSON.parse(localStorage.getItem('users')) || [];
-  const employees = users.filter(u => u.role==='employee' && u.status==='confirmed');
+      // Render confirmed employees
+      function renderEmployees() {
+        const container = document.getElementById('tableContainer');
+        const users = JSON.parse(localStorage.getItem('users')) || [];
 
-  if(employees.length===0){
-    container.innerHTML='<div style="text-align:center; padding:30px; background:#f8d7da; color:#721c24; border-radius:10px; margin:30px auto; max-width:500px; font-weight:bold;">No employees added yet.</div>';
-    return;
-  }
+        const employees = users.filter(
+          u => u.role === 'employee' && u.status === 'confirmed'
+        );
 
-  let table = `<table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Status</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>`;
-  employees.forEach(u=>{
-    table+=`<tr>
-      <td>${u.id}</td>
-      <td>${u.name}</td>
-      <td>${u.email}</td>
-      <td>${u.status}</td>
-      <td>
-        <button class="action-btn info-btn" onclick="showInfo(${u.id})">Info</button>
-        <button class="action-btn delete-btn" onclick="showDelete(${u.id})">Delete</button>
-      </td>
-    </tr>`;
-  });
-  table+='</tbody></table>';
-  container.innerHTML=table;
-}
+        if (employees.length === 0) {
+          container.innerHTML = `
+            <div style="text-align:center; padding:30px; background:#f8d7da; color:#721c24; border-radius:10px; margin:30px auto; max-width:500px; font-weight:bold;">
+              No employees added yet.
+            </div>
+          `;
+          return;
+        }
 
-// Show info modal
-const modalBg = document.getElementById('modalBg');
-function showInfo(id){
-  const users = JSON.parse(localStorage.getItem('users')) || [];
-  const user = users.find(u=>u.id===id);
-  if(!user) return;
-  document.getElementById('mName').value = user.profile?.name || user.name;
-  document.getElementById('mAddress').value = user.profile?.address || '';
-  document.getElementById('mDepartment').value = user.profile?.department || '';
-  document.getElementById('mSkills').value = user.profile?.skills || '';
-  document.getElementById('mDob').value = user.profile?.dob || '';
-  document.getElementById('mStatus').value = user.status || '';
-  modalBg.style.display='flex';
-}
+        const table = document.createElement('table');
 
-function closeModal(){
-  modalBg.style.display='none';
-}
+        const thead = document.createElement('thead');
+        thead.innerHTML = `
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        `;
 
-// Delete confirmation
-const confirmBox = document.getElementById('confirmBox');
-const successMsg = document.getElementById('successMsg');
+        const tbody = document.createElement('tbody');
 
-function showDelete(id){
-  deleteEmpId = id;
-  confirmBox.style.display = 'block';
-}
+        employees.forEach(u => {
+          const row = document.createElement('tr');
 
-function cancelDelete(){
-  confirmBox.style.display = 'none';
-}
+          [u.id, u.name, u.email, u.status].forEach(value => {
+            const cell = document.createElement('td');
+            cell.textContent = value ?? '';
+            row.appendChild(cell);
+          });
 
-function confirmDelete(){
-  let users = JSON.parse(localStorage.getItem('users')) || [];
-  users = users.filter(u => u.id !== deleteEmpId);
-  localStorage.setItem('users', JSON.stringify(users));
-  confirmBox.style.display='none';
-  successMsg.style.display='block';
-  renderEmployees();
-  setTimeout(()=>{ successMsg.style.display='none'; }, 2000);
-}
+          const actionsCell = document.createElement('td');
 
-renderEmployees();
-</script>
+          const infoButton = document.createElement('button');
+          infoButton.type = 'button';
+          infoButton.className = 'action-btn info-btn';
+          infoButton.textContent = 'Info';
+          infoButton.addEventListener('click', () => showInfo(u.id));
+
+          const deleteButton = document.createElement('button');
+          deleteButton.type = 'button';
+          deleteButton.className = 'action-btn delete-btn';
+          deleteButton.textContent = 'Delete';
+          deleteButton.addEventListener('click', () => showDelete(u.id));
+
+          actionsCell.appendChild(infoButton);
+          actionsCell.appendChild(deleteButton);
+          row.appendChild(actionsCell);
+          tbody.appendChild(row);
+        });
+
+        table.appendChild(thead);
+        table.appendChild(tbody);
+
+        container.replaceChildren(table);
+      }
+
+      // Show info modal
+      const modalBg = document.getElementById('modalBg');
+
+      function showInfo(id) {
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+        const user = users.find(u => u.id === id);
+
+        if (!user) return;
+
+        document.getElementById('mName').value =
+          user.profile?.name || user.name || '';
+
+        document.getElementById('mAddress').value =
+          user.profile?.address || '';
+
+        document.getElementById('mDepartment').value =
+          user.profile?.department || '';
+
+        document.getElementById('mSkills').value =
+          user.profile?.skills || '';
+
+        document.getElementById('mDob').value =
+          user.profile?.dob || '';
+
+        document.getElementById('mStatus').value =
+          user.status || '';
+
+        modalBg.style.display = 'flex';
+      }
+
+      function closeModal() {
+        modalBg.style.display = 'none';
+      }
+
+      // Delete confirmation
+      const confirmBox = document.getElementById('confirmBox');
+      const successMsg = document.getElementById('successMsg');
+
+      function showDelete(id) {
+        deleteEmpId = id;
+        confirmBox.style.display = 'block';
+      }
+
+      function cancelDelete() {
+        confirmBox.style.display = 'none';
+        deleteEmpId = null;
+      }
+
+      function confirmDelete() {
+        if (deleteEmpId === null) return;
+
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        users = users.filter(u => u.id !== deleteEmpId);
+
+        localStorage.setItem('users', JSON.stringify(users));
+
+        confirmBox.style.display = 'none';
+        deleteEmpId = null;
+
+        successMsg.style.display = 'block';
+        renderEmployees();
+
+        setTimeout(() => {
+          successMsg.style.display = 'none';
+        }, 2000);
+      }
+
+      // Close modal by clicking outside it
+      modalBg.addEventListener('click', function (event) {
+        if (event.target === modalBg) {
+          closeModal();
+        }
+      });
+
+      renderEmployees();
+    }
+  </script>
 
 </body>
 </html>

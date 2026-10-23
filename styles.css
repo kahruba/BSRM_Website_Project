@@ -163,4 +163,73 @@ nav ul li a:hover {
 .small { font-size: 13px; color: #666; }
 
 
+/* Responsive CSS - add at the END of styles.css */
+
+/* Prevent elements from overflowing */
+* {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+}
+
+/* Login container */
+@media (max-width: 480px) {
+  .login-container {
+    width: calc(100% - 30px);
+    max-width: 380px;
+    margin: 15px auto;
+    padding: 24px 18px;
+  }
+}
+
+/* Navigation */
+@media (max-width: 576px) {
+  nav ul {
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 8px;
+  }
+
+  nav ul li a {
+    display: block;
+    padding: 8px 10px;
+  }
+
+  header {
+    padding: 16px 10px;
+  }
+}
+
+/* Dashboard cards */
+@media (max-width: 576px) {
+  .cards {
+    padding: 15px;
+    gap: 15px;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 320px;
+  }
+}
+
+/* Tables: allow horizontal scrolling on small screens */
+@media (max-width: 768px) {
+  .table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+
+/* Keep dashboard content within the screen */
+.dashboard-wrapper {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+
+
 

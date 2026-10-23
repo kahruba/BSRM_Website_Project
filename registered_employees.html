@@ -1,157 +1,254 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Registered Employees - BSRM</title>
-<link rel="stylesheet" href="styles.css">
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #f0f2f5;
-    margin: 0;
-    padding: 0;
-  }
-  header {
-    width: 100%;
-    background-color: #0072ff;
-    color: white;
-    padding: 20px 0;
-    text-align: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  }
-  header h1 { margin: 0; font-size: 28px; }
-  
-  .table-container {
-    width: 90%;
-    max-width: 900px;
-    margin: 30px auto;
-    overflow-x: auto;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registered Employees - BSRM</title>
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    background: #fff;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
-  }
+  <link rel="stylesheet" href="styles.css">
 
-  th, td {
-    padding: 12px;
-    border-bottom: 1px solid #eee;
-    text-align: left;
-  }
+  <!-- Bootstrap 5.3.3 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  thead {
-    background: #0072ff;
-    color: #fff;
-  }
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      margin: 0;
+      padding: 0;
+    }
 
-  .action-btn {
-    padding: 6px 10px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    color: #fff;
-    margin-right: 5px;
-  }
+    header {
+      width: 100%;
+      background-color: #0072ff;
+      color: white;
+      padding: 20px 15px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      box-sizing: border-box;
+    }
 
-  .confirm-btn { background: #4CAF50; }
-  .cancel-btn { background: #f44336; }
-  .pending-btn { background: #FF9800; }
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
 
-  /* Colourful empty box */
-  .empty-box {
-    background: #ffecb3;
-    color: #8b4513;
-    padding: 20px;
-    text-align: center;
-    font-weight: bold;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    margin: 30px auto;
-    max-width: 500px;
-    font-size: 18px;
-  }
-</style>
+    .table-container {
+      width: 90%;
+      max-width: 900px;
+      margin: 30px auto;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    #employeeTable {
+      width: 100%;
+      min-width: 700px;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+      margin-bottom: 0;
+    }
+
+    #employeeTable th,
+    #employeeTable td {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    #employeeTable thead {
+      background: #0072ff;
+      color: #fff;
+    }
+
+    #employeeTable th {
+      white-space: nowrap;
+    }
+
+    .action-btn {
+      padding: 6px 10px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      color: #fff;
+      margin: 2px;
+      white-space: nowrap;
+    }
+
+    .confirm-btn {
+      background: #4CAF50;
+    }
+
+    .cancel-btn {
+      background: #f44336;
+    }
+
+    .pending-btn {
+      background: #FF9800;
+    }
+
+    /* Colourful empty box */
+    .empty-box {
+      background: #ffecb3;
+      color: #8b4513;
+      padding: 20px;
+      text-align: center;
+      font-weight: bold;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin: 30px auto;
+      max-width: 500px;
+      font-size: 18px;
+    }
+
+    @media (max-width: 576px) {
+      header {
+        padding: 18px 12px;
+      }
+
+      header h1 {
+        font-size: 23px;
+      }
+
+      .table-container {
+        width: 95%;
+        margin: 20px auto;
+      }
+
+      #employeeTable th,
+      #employeeTable td {
+        padding: 10px;
+        font-size: 14px;
+      }
+
+      .action-btn {
+        padding: 6px 9px;
+        font-size: 13px;
+      }
+
+      .empty-box {
+        padding: 16px;
+        font-size: 16px;
+        margin: 15px auto;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<header>
-  <h1>Registered Employees</h1>
-</header>
+  <header>
+    <h1>Registered Employees</h1>
+  </header>
 
-<div class="table-container">
-  <table id="employeeTable">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Status</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Dynamically filled -->
-    </tbody>
-  </table>
-</div>
+  <div class="table-container">
+    <table id="employeeTable" class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
 
-<script>
-  const logged = JSON.parse(localStorage.getItem('loggedIn'));
-  if(!logged || logged.role !== 'admin'){
-    alert('Access denied. Please log in as admin.');
-    window.location.href = 'admin_login.html';
-  }
+      <tbody>
+        <!-- Dynamically filled -->
+      </tbody>
+    </table>
+  </div>
 
-  function renderRegisteredEmployees(){
-    const tbody = document.querySelector('#employeeTable tbody');
-    tbody.innerHTML = '';
+  <script>
+    const logged = JSON.parse(localStorage.getItem('loggedIn'));
 
-    const users = JSON.parse(localStorage.getItem('users')) || [];
-    const registered = users.filter(u => u.role === 'employee' && !u.addedByAdmin);
-
-    if(registered.length === 0){
-      // Show colourful empty box
-      tbody.innerHTML = <tr><td colspan="5"><div class="empty-box">No registered employees found</div></td></tr>;
-      return;
+    if (!logged || logged.role !== 'admin') {
+      alert('Access denied. Please log in as admin.');
+      window.location.href = 'admin_login.html';
     }
 
-    registered.forEach(u => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${u.id}</td>
-        <td>${u.name}</td>
-        <td>${u.email}</td>
-        <td>${u.status}</td>
-        <td>
-          <button class="action-btn confirm-btn" onclick="updateStatus(${u.id}, 'confirmed')">Confirm</button>
-          <button class="action-btn cancel-btn" onclick="updateStatus(${u.id}, 'cancelled')">Cancel</button>
-          <button class="action-btn pending-btn" onclick="updateStatus(${u.id}, 'pending')">Pending</button>
-        </td>
-      `;
-      tbody.appendChild(tr);
-    });
-  }
+    function renderRegisteredEmployees() {
+      const tbody = document.querySelector('#employeeTable tbody');
+      tbody.innerHTML = '';
 
-  function updateStatus(id, newStatus){
-    let users = JSON.parse(localStorage.getItem('users')) || [];
-    let user = users.find(u => u.id === id);
-    if(user){
-      user.status = newStatus;
-      if(newStatus === 'confirmed'){
-        user.addedByAdmin = true;
-      } else {
-        user.addedByAdmin = false;
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+
+      const registered = users.filter(
+        u => u.role === 'employee' && !u.addedByAdmin
+      );
+
+      if (registered.length === 0) {
+        // Show colourful empty box
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5">
+              <div class="empty-box">
+                No registered employees found
+              </div>
+            </td>
+          </tr>
+        `;
+        return;
       }
-      localStorage.setItem('users', JSON.stringify(users));
-      renderRegisteredEmployees();
-    }
-  }
 
-  renderRegisteredEmployees();
-</script>
+      registered.forEach(u => {
+        const tr = document.createElement('tr');
+
+        tr.innerHTML = `
+          <td>${u.id}</td>
+          <td>${u.name}</td>
+          <td>${u.email}</td>
+          <td>${u.status}</td>
+          <td>
+            <button
+              class="action-btn confirm-btn"
+              onclick="updateStatus(${u.id}, 'confirmed')">
+              Confirm
+            </button>
+
+            <button
+              class="action-btn cancel-btn"
+              onclick="updateStatus(${u.id}, 'cancelled')">
+              Cancel
+            </button>
+
+            <button
+              class="action-btn pending-btn"
+              onclick="updateStatus(${u.id}, 'pending')">
+              Pending
+            </button>
+          </td>
+        `;
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    function updateStatus(id, newStatus) {
+      let users = JSON.parse(localStorage.getItem('users')) || [];
+      let user = users.find(u => u.id === id);
+
+      if (user) {
+        user.status = newStatus;
+
+        if (newStatus === 'confirmed') {
+          user.addedByAdmin = true;
+        } else {
+          user.addedByAdmin = false;
+        }
+
+        localStorage.setItem('users', JSON.stringify(users));
+        renderRegisteredEmployees();
+      }
+    }
+
+    renderRegisteredEmployees();
+  </script>
+
 </body>
 </html>

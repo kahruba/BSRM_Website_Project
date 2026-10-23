@@ -2,8 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Welcome to BSRM</title>
+
+  <!-- Bootstrap 5.3.3 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
   <link rel="stylesheet" href="styles.css">
+
   <style>
     body {
       margin: 0;
@@ -15,7 +21,7 @@
     /* News Ticker */
     .news-ticker {
       width: 100%;
-      background: #111; 
+      background: #111;
       overflow: hidden;
       white-space: nowrap;
       box-sizing: border-box;
@@ -27,11 +33,12 @@
 
     .news-ticker p {
       display: inline-block;
-      font-size: 24px; 
+      font-size: 24px;
       font-weight: bold;
       padding-left: 100%;
       animation: scroll-left 20s linear infinite;
       color: #fdfdf8ff;
+      margin-bottom: 0;
     }
 
     @keyframes scroll-left {
@@ -64,7 +71,9 @@
       background-position: center center;
     }
 
-    .slide.active { opacity: 1; }
+    .slide.active {
+      opacity: 1;
+    }
 
     .front-container {
       position: absolute;
@@ -75,6 +84,7 @@
       padding: 40px 30px;
       border-radius: 12px;
       max-width: 500px;
+      width: max-content;
       text-align: center;
       box-shadow: 0 6px 20px rgba(0,0,0,0.5);
       z-index: 10;
@@ -103,9 +113,20 @@
       transition: 0.3s;
     }
 
-    .btn-admin { background-color: #f44336; color: #fff; }
-    .btn-employee { background-color: #4CAF50; color: #fff; }
-    .btn-about { background-color: #2196F3; color: #fff; }
+    .btn-admin {
+      background-color: #f44336;
+      color: #fff;
+    }
+
+    .btn-employee {
+      background-color: #4CAF50;
+      color: #fff;
+    }
+
+    .btn-about {
+      background-color: #2196F3;
+      color: #fff;
+    }
 
     .front-container button:hover {
       opacity: 0.85;
@@ -128,10 +149,17 @@
       transition: 0.3s;
     }
 
-    .arrow:hover { background: rgba(0,0,0,0.5); }
+    .arrow:hover {
+      background: rgba(0,0,0,0.5);
+    }
 
-    .arrow-left { left: 20px; }
-    .arrow-right { right: 20px; }
+    .arrow-left {
+      left: 20px;
+    }
+
+    .arrow-right {
+      right: 20px;
+    }
 
     /* Products & Services Section */
     .products-section {
@@ -203,7 +231,7 @@
       width: 32%;
       max-width: 300px;
       max-height: 200px;
-      object-fit: contain; 
+      object-fit: contain;
       border-radius: 12px;
       transition: transform 0.3s, opacity 0.8s;
       opacity: 0;
@@ -214,7 +242,9 @@
       transform: translateY(0);
     }
 
-    .news-img:hover { transform: scale(1.05); }
+    .news-img:hover {
+      transform: scale(1.05);
+    }
 
     /* Achievements Section */
     .achievements-section {
@@ -264,7 +294,8 @@
       margin-bottom: 10px;
     }
 
-    .footer p, .footer a {
+    .footer p,
+    .footer a {
       color: #fff;
       text-decoration: none;
       margin: 2px 0;
@@ -286,6 +317,171 @@
     .social-links a:hover {
       background: #fff;
       color: #111;
+    }
+
+    /* Responsive adjustments only */
+    @media (max-width: 768px) {
+      .news-ticker p {
+        font-size: 19px;
+      }
+
+      .hero-bg {
+        min-height: 520px;
+        height: 75vh;
+      }
+
+      .front-container {
+        width: calc(100% - 100px);
+        max-width: 500px;
+        padding: 30px 18px;
+      }
+
+      .front-container h1 {
+        font-size: 28px;
+      }
+
+      .front-container p {
+        font-size: 16px;
+        margin-bottom: 22px;
+      }
+
+      .front-container button {
+        padding: 11px 17px;
+        margin: 6px;
+      }
+
+      .arrow {
+        font-size: 36px;
+        padding: 8px 12px;
+      }
+
+      .arrow-left {
+        left: 8px;
+      }
+
+      .arrow-right {
+        right: 8px;
+      }
+
+      .products-section h2,
+      .news-section h2,
+      .achievements-section h2 {
+        font-size: 30px;
+        margin-bottom: 35px;
+      }
+
+      .news-img {
+        width: 45%;
+      }
+
+      .counters {
+        gap: 35px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .news-ticker {
+        height: 42px;
+      }
+
+      .news-ticker p {
+        font-size: 16px;
+      }
+
+      .hero-bg {
+        min-height: 500px;
+        height: 75vh;
+      }
+
+      .front-container {
+        width: calc(100% - 76px);
+        padding: 25px 12px;
+      }
+
+      .front-container h1 {
+        font-size: 25px;
+      }
+
+      .front-container p {
+        font-size: 15px;
+        margin-bottom: 20px;
+      }
+
+      .front-container button {
+        font-size: 14px;
+        padding: 10px 12px;
+        margin: 5px 3px;
+      }
+
+      .arrow {
+        font-size: 28px;
+        padding: 7px 9px;
+      }
+
+      .arrow-left {
+        left: 5px;
+      }
+
+      .arrow-right {
+        right: 5px;
+      }
+
+      .products-section {
+        padding: 45px 12px 35px;
+      }
+
+      .products-section h2,
+      .news-section h2,
+      .achievements-section h2 {
+        font-size: 26px;
+        margin-bottom: 30px;
+      }
+
+      .product-row {
+        gap: 14px;
+      }
+
+      .product-img {
+        width: 125px;
+        height: 125px;
+      }
+
+      .news-section {
+        padding: 45px 12px 55px;
+      }
+
+      .news-row {
+        gap: 25px;
+      }
+
+      .news-img {
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .achievements-section {
+        padding: 55px 15px;
+      }
+
+      .counters {
+        gap: 28px;
+      }
+
+      .counter {
+        font-size: 25px;
+      }
+
+      .counter-label {
+        font-size: 16px;
+      }
+
+      .footer {
+        padding: 40px 18px;
+      }
+
+      .social-links a {
+        margin-bottom: 8px;
+      }
     }
   </style>
 </head>
@@ -311,6 +507,7 @@
     <div class="front-container">
       <h1>Welcome to BSRM</h1>
       <p>We provide high-quality steel products and solutions</p>
+
       <div>
         <button class="btn-admin" onclick="location.href='admin_login.html'">Admin</button>
         <button class="btn-employee" onclick="location.href='employee_login.html'">Employee</button>
@@ -322,37 +519,42 @@
   <!-- Products -->
   <div class="products-section">
     <h2>Our Products & Services</h2>
+
     <div class="product-row">
-      <img src="images/product1-bg.png" class="product-img">
-      <img src="images/product2-bg.png" class="product-img">
-      <img src="images/product3-bg.png" class="product-img">
-      <img src="images/product4-bg.png" class="product-img">
-      <img src="images/product5-bg.png" class="product-img">
+      <img src="images/product1-bg.png" class="product-img" alt="Product 1">
+      <img src="images/product2-bg.png" class="product-img" alt="Product 2">
+      <img src="images/product3-bg.png" class="product-img" alt="Product 3">
+      <img src="images/product4-bg.png" class="product-img" alt="Product 4">
+      <img src="images/product5-bg.png" class="product-img" alt="Product 5">
     </div>
   </div>
 
   <!-- News -->
   <div class="news-section">
     <h2>News & Updates</h2>
+
     <div class="news-row">
-      <img src="images/product8-bg.png" class="news-img">
-      <img src="images/product9-bg.png" class="news-img">
-      <img src="images/product10-bg.png" class="news-img">
+      <img src="images/product8-bg.png" class="news-img" alt="News update 1">
+      <img src="images/product9-bg.png" class="news-img" alt="News update 2">
+      <img src="images/product10-bg.png" class="news-img" alt="News update 3">
     </div>
   </div>
 
   <!-- Achievements -->
   <div class="achievements-section">
     <h2>Our Achievements</h2>
+
     <div class="counters">
       <div>
         <div class="counter" data-target="60">0+</div>
         <div class="counter-label">Years of Experience</div>
       </div>
+
       <div>
         <div class="counter" data-target="3000">0+</div>
         <div class="counter-label">Employees</div>
       </div>
+
       <div>
         <div class="counter" data-target="100">0+</div>
         <div class="counter-label">Projects Completed</div>
@@ -362,11 +564,24 @@
 
   <!-- Footer -->
   <div class="footer">
-    <div><h3>Address</h3><p>123 BSRM Street, Dhaka, Bangladesh</p></div>
-    <div><h3>Phone</h3><p>+880 1234 567890</p></div>
-    <div><h3>Email</h3><p>info@bsrm.com</p></div>
+    <div>
+      <h3>Address</h3>
+      <p>123 BSRM Street, Dhaka, Bangladesh</p>
+    </div>
+
+    <div>
+      <h3>Phone</h3>
+      <p>+880 1234 567890</p>
+    </div>
+
+    <div>
+      <h3>Email</h3>
+      <p>info@bsrm.com</p>
+    </div>
+
     <div>
       <h3>Follow Us</h3>
+
       <div class="social-links">
         <a href="#">Facebook</a>
         <a href="#">LinkedIn</a>
@@ -380,17 +595,17 @@
     const slides = document.querySelectorAll('.slide');
     let currentSlide = 0;
 
-    function showSlide(index){
-      slides.forEach(s=>s.classList.remove('active'));
+    function showSlide(index) {
+      slides.forEach(s => s.classList.remove('active'));
       slides[index].classList.add('active');
     }
 
-    function nextSlide(){
-      currentSlide = (currentSlide+1) % slides.length;
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % slides.length;
       showSlide(currentSlide);
     }
 
-    function prevSlide(){
+    function prevSlide() {
       currentSlide = (currentSlide - 1 + slides.length) % slides.length;
       showSlide(currentSlide);
     }
@@ -401,44 +616,50 @@
     document.addEventListener('DOMContentLoaded', () => {
       const images = document.querySelectorAll('.product-img, .news-img');
 
-      function revealOnScroll(){
+      function revealOnScroll() {
         const windowHeight = window.innerHeight;
+
         images.forEach(img => {
-          if(img.getBoundingClientRect().top < windowHeight - 50){
+          if (img.getBoundingClientRect().top < windowHeight - 50) {
             img.classList.add('visible');
           }
         });
       }
+
       window.addEventListener('scroll', revealOnScroll);
       revealOnScroll();
     });
 
     // Counters
     const counters = document.querySelectorAll('.counter');
-    counters.forEach(counter=>{
+
+    counters.forEach(counter => {
       const animate = () => {
         const target = +counter.getAttribute('data-target');
-        let count = +counter.innerText.replace('+','');
+        let count = +counter.innerText.replace('+', '');
         const increment = Math.ceil(target / 50);
 
-        if(count < target){
-          counter.innerText = `${count+increment}+`;
+        if (count < target) {
+          counter.innerText = `${Math.min(count + increment, target)}+`;
           setTimeout(animate, 30);
         } else {
           counter.innerText = `${target}+`;
         }
       };
 
-      const observer = new IntersectionObserver(entries=>{
-        if(entries[0].isIntersecting){
+      const observer = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) {
           animate();
           observer.unobserve(counter);
         }
       });
+
       observer.observe(counter);
     });
   </script>
 
 </body>
 </html>
+
+
 
